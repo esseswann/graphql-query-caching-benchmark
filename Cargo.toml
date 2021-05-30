@@ -4,6 +4,14 @@ version = "0.1.0"
 authors = ["jsus <esseswann@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+graphql-parser = "0.3.0"
+twox-hash = "*"
+fasthash = "*"
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "performance"
+harness = false
