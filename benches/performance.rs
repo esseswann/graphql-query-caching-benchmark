@@ -4,8 +4,7 @@ use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Occupied, Vacant};
 
 use std::hash::BuildHasherDefault;
-use twox_hash::XxHash64;
-use fasthash::{murmur3, Murmur3HasherExt};
+use fasthash::{Murmur3HasherExt};
 
 const QUERY: &str = "query ($numTripPatterns: Int!, $from: Location!, $to: Location!, $dateTime: DateTime!, $arriveBy: Boolean!, $wheelchair: Boolean!, $modes: [Mode]!, $transportSubmodes: [TransportSubmodeFilter], $maxPreTransitWalkDistance: Float, $walkSpeed: Float, $minimumTransferTime: Int, $allowBikeRental: Boolean, $useFlex: Boolean, $banned: InputBanned, $whiteListed: InputWhiteListed) {
     trip(
@@ -276,7 +275,7 @@ const QUERY: &str = "query ($numTripPatterns: Int!, $from: Location!, $to: Locat
 type Cache = HashMap<
     &'static str,
     Document<'static, &'static str>,
-    BuildHasherDefault<XxHash64>
+    BuildHasherDefault<Murmur3HasherExt>
 >;
 
 pub fn parse(query: &'static str) -> Document<'static, &'static str> {
