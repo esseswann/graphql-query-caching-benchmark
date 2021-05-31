@@ -282,12 +282,12 @@ pub fn parse(query: &'static str) -> Document<'static, &'static str> {
     parse_query::<&str>(query).unwrap()
 }
 
-pub fn cached_parse(query: &'static str, cache: &mut Cache) -> Document<'static, &'static str> {
+pub fn cached_parse<'a>(query: &'static str, cache: &'a mut Cache) -> &'a Document<'static, &'static str> {
     match cache.entry(query) {
-        Occupied(entry) => entry.get().clone(),
+        Occupied(entry) => entry.into_mut(),
         Vacant(entry) => {
             let result = parse_query::<&str>(query).unwrap();
-            entry.insert(result).clone()
+            entry.insert(result)
         }
     }
 }
@@ -297,7 +297,7 @@ fn benchmark(c: &mut Criterion) {
     let mut cache: Cache = Default::default();
     for i in [20u64, 21u64].iter() {
         group.bench_with_input(BenchmarkId::new("Cached", i), i, 
-            |b, _| b.iter(|| cached_parse(black_box(QUERY), &mut cache)));
+            |b, _| b.iter(|| { cached_parse(black_box(QUERY), &mut cache); }));
         group.bench_with_input(BenchmarkId::new("No cache", i), i, 
             |b, _| b.iter(|| parse(black_box(QUERY))));
     }
