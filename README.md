@@ -26,5 +26,5 @@ The difference between cached and non-cached variants is about 116 times
 
 ## Running the benchmark
 Make sure you have `cargo` and `rustc` installed
-Clone the repo
-Execute `cargo bench`
+- Clone the repo
+- Execute `cargo bench`
